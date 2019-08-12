@@ -1,0 +1,1899 @@
+SOLDIER--
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+class DLLNode<E> {
+    protected E element;
+    protected DLLNode<E> pred, succ;
+    protected int index;
+
+    public DLLNode(E elem, DLLNode<E> pred, DLLNode<E> succ) {
+        this.element = elem;
+        this.pred = pred;
+        this.succ = succ;
+        index=0;
+    }
+
+    @Override
+    public String toString() {
+        return "<-" + element.toString() + "->";
+    }
+}
+
+class DLL<E> {
+    private DLLNode<E> first, last;
+
+    public DLL() {
+        // Construct an empty SLL
+        this.first = null;
+        this.last = null;
+    }
+
+    public void deleteList() {
+        first = null;
+        last = null;
+    }
+
+    public int length() {
+        int ret;
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret = 1;
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret++;
+            }
+            return ret;
+        } else
+            return 0;
+
+    }
+
+    public void insertFirst(E o) {
+        DLLNode<E> ins = new DLLNode<E>(o, null, first);
+        if (first == null)
+            last = ins;
+        else
+            first.pred = ins;
+        first = ins;
+    }
+
+    public void insertLast(E o) {
+        if (first == null)
+        {
+            insertFirst(o);
+
+        }
+
+        else {
+            DLLNode<E> ins = new DLLNode<E>(o, last, null);
+            last.succ = ins;
+            last = ins;
+        }
+    }
+
+    public void insertAfter(E o, DLLNode<E> after) {
+        if (after == last) {
+            insertLast(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, after, after.succ);
+        after.succ.pred = ins;
+        after.succ = ins;
+    }
+
+    public void insertBefore(E o, DLLNode<E> before) {
+        if (before == first) {
+            insertFirst(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, before.pred, before);
+        before.pred.succ = ins;
+        before.pred = ins;
+    }
+
+    public E deleteFirst() {
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            first = first.succ;
+            if (first != null) first.pred = null;
+            if (first == null)
+                last = null;
+            return tmp.element;
+        } else
+            return null;
+    }
+
+    public E deleteLast() {
+        if (first != null) {
+            if (first.succ == null)
+                return deleteFirst();
+            else {
+                DLLNode<E> tmp = last;
+                last = last.pred;
+                last.succ = null;
+                return tmp.element;
+            }
+        }
+        // else throw Exception
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        String ret = new String();
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret += tmp + "<->";
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret += tmp + "<->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+
+    public DLLNode<E> getFirst() {
+        return first;
+    }
+
+    public DLLNode<E> getLast() {
+
+        return last;
+    }
+
+}
+
+
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        DLL<Integer> lista = new DLL<Integer>();
+        BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+        String s = stdin.readLine();
+        int N = Integer.parseInt(s);
+        s = stdin.readLine();
+        String[] ids = s.split(" ");
+        for (int i = 0; i < N; i++) {
+            lista.insertLast(Integer.parseInt(ids[i]));
+        }
+
+        s = stdin.readLine();
+        String interval[] = s.split(" ");
+        int a = Integer.parseInt(interval[0]);
+        int b = Integer.parseInt(interval[1]);
+
+        s = stdin.readLine();
+        interval = s.split(" ");
+        int c = Integer.parseInt(interval[0]);
+        int d = Integer.parseInt(interval[1]);
+
+        DLL<Integer> new_list = new DLL<>();
+        DLLNode<Integer> head = lista.getFirst();
+        int i = 1;
+        DLLNode<Integer>first=null;
+        DLLNode<Integer>second=null;
+        DLLNode<Integer>third=null;
+        DLLNode<Integer>fourth=null;
+        while(head!=null)
+        {
+            if(head.element.equals(a))
+            {
+                first=head;
+            }
+            if(head.element.equals(b))
+            {
+                second=head;
+            }
+            if(head.element.equals(c))
+            {
+                third=head;
+            }
+            if(head.element.equals(d))
+            {
+                fourth=head;
+            }
+
+            head=head.succ;
+        }
+
+        DLL<Integer> list1 = new DLL<>();
+        head = lista.getFirst();
+
+
+            while (head != first) {
+                list1.insertLast(head.element);
+                head = head.succ;
+            }
+
+
+
+
+        DLL<Integer> list2  = new DLL<>();
+        if(head==second)
+        {
+            //System.out.println(head.element);
+            list2.insertLast(head.element);
+            head=head.succ;
+        }
+        else {
+            while (head != second) {
+                list2.insertLast(head.element);
+                head = head.succ;
+            }
+            list2.insertLast(head.element);
+            head=head.succ;
+        }
+
+        DLL<Integer> list3  = new DLL<>();
+
+
+            while (head != third) {
+                list3.insertLast(head.element);
+                head = head.succ;
+            }
+
+
+
+        DLL<Integer> list4  = new DLL<>();
+        if(head==fourth)
+        {
+            list4.insertLast(head.element);
+            head=head.succ;
+        }
+        else {
+            while (head != fourth) {
+                list4.insertLast(head.element);
+                head = head.succ;
+            }
+            list4.insertLast(head.element);
+            head=head.succ;
+        }
+
+
+        DLL<Integer> list5  = new DLL<>();
+
+        while(head != null)
+        {
+            list5.insertLast(head.element);
+            head=head.succ;
+        }
+
+        //--------------------------------------------------------------------//
+        DLL<Integer>list6 = new DLL<>();
+
+        head = list1.getFirst();
+        if(list1!=null)
+        {
+            while (head!=null)
+            {
+                list6.insertLast(head.element);
+                head=head.succ;
+            }
+        }
+
+        head = list4.getFirst();
+        if(list4!=null)
+        {
+            while (head!=null)
+            {
+                list6.insertLast(head.element);
+                head=head.succ;
+            }
+        }
+
+        head = list3.getFirst();
+        if(list3!=null)
+        {
+            while (head!=null)
+            {
+                list6.insertLast(head.element);
+                head=head.succ;
+            }
+        }
+
+
+        head = list2.getFirst();
+        if(list2!=null)
+        {
+            while (head!=null)
+            {
+                list6.insertLast(head.element);
+                head=head.succ;
+            }
+        }
+
+
+
+
+
+
+        head = list5.getFirst();
+        if(list5!=null)
+        {
+            while (head!=null)
+            {
+                list6.insertLast(head.element);
+                head=head.succ;
+            }
+        }
+
+        head = list6.getFirst();
+        while(head!=null)
+        {
+            System.out.print(head.element+" ");
+            head=head.succ;
+        }
+
+
+
+    }
+}
+
+==========================================================================================================
+SUMA OD ABSOLUTNI RAZLIKI
+import java.util.*;
+import java.math.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int length = scan.nextInt();
+        int size = scan.nextInt();
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        for (int i = 0; i<length; i++){
+            arr.add(scan.nextInt());
+        }
+
+        ArrayList<Integer> arr2 = new ArrayList<>();
+
+        for (int i = 0; i<size; i++){
+            if(i%2 == 0){
+                arr2.add(getMax(arr));
+            }
+            else {
+                arr2.add(getMin(arr));
+            }
+
+        }
+        int counter = 0;
+        for (int i = size-1; i>1; i--){
+            counter = counter + Math.abs(arr2.get(i) + arr2.get(i-1));
+        }
+        System.out.println(counter);
+    }
+
+    public static int getMax(ArrayList<Integer> arr){
+        int max = Integer.MIN_VALUE;
+        for (int i : arr) {
+            if (max < i)
+            {
+                max = i;
+            }
+        }
+        return max;
+
+    }
+
+    public static int getMin(ArrayList<Integer> arr){
+        int min = Integer.MAX_VALUE;
+        for (int i : arr) {
+            if (min > i)
+            {
+                min = i;
+            }
+        }
+        return min;
+
+    }
+}
+==========================================================================================================
+(No idea which one this is)
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+class SLLNode<E> {
+    protected E element;
+    protected SLLNode<E> succ;
+
+    public SLLNode(E elem, SLLNode<E> succ) {
+        this.element = elem;
+        this.succ = succ;
+    }
+
+    @Override
+    public String toString() {
+        return element.toString();
+    }
+}
+class SLL<E> {
+    private SLLNode<E> first;
+
+    public SLL() {
+        // Construct an empty SLL
+        this.first = null;
+    }
+
+    public void deleteList() {
+        first = null;
+    }
+
+    public int length() {
+        int ret;
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            ret = 1;
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret++;
+            }
+            return ret;
+        } else
+            return 0;
+
+    }
+
+    @Override
+    public String toString() {
+        String ret = new String();
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            ret += tmp + "->";
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret += tmp + "->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+
+    public void insertFirst(E o) {
+        SLLNode<E> ins = new SLLNode<E>(o, first);
+        first = ins;
+    }
+
+    public void insertAfter(E o, SLLNode<E> node) {
+        if (node != null) {
+            SLLNode<E> ins = new SLLNode<E>(o, node.succ);
+            node.succ = ins;
+        } else {
+            System.out.println("Dadenot jazol e null");
+        }
+    }
+
+    public void insertBefore(E o, SLLNode<E> before) {
+
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            if(first==before){
+                this.insertFirst(o);
+                return;
+            }
+            //ako first!=before
+            while (tmp.succ != before)
+                tmp = tmp.succ;
+            if (tmp.succ == before) {
+                SLLNode<E> ins = new SLLNode<E>(o, before);
+                tmp.succ = ins;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+            }
+        } else {
+            System.out.println("Listata e prazna");
+        }
+    }
+
+    public void insertLast(E o) {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            while (tmp.succ != null)
+                tmp = tmp.succ;
+            SLLNode<E> ins = new SLLNode<E>(o, null);
+            tmp.succ = ins;
+        } else {
+            insertFirst(o);
+        }
+    }
+
+    public E deleteFirst() {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            first = first.succ;
+            return tmp.element;
+        } else {
+            System.out.println("Listata e prazna");
+            return null;
+        }
+    }
+
+    public E delete(SLLNode<E> node) {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            if(first ==node){
+                return this.deleteFirst();
+            }
+            while (tmp.succ != node && tmp.succ.succ != null)
+                tmp = tmp.succ;
+            if (tmp.succ == node) {
+                tmp.succ = tmp.succ.succ;
+                return node.element;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+                return null;
+            }
+        } else {
+            System.out.println("Listata e prazna");
+            return null;
+        }
+
+    }
+
+    public SLLNode<E> getFirst() {
+        return first;
+    }
+
+    public SLLNode<E> find(E o) {
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            while (tmp.element != o && tmp.succ != null)
+                tmp = tmp.succ;
+            if (tmp.element == o) {
+                return tmp;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+            }
+        } else {
+            System.out.println("Listata e prazna");
+        }
+        return first;
+    }
+
+    public Iterator<E> iterator () {
+        // Return an iterator that visits all elements of this list, in left-to-right order.
+        return new LRIterator<E>();
+    }
+
+    // //////////Inner class ////////////
+
+    private class LRIterator<E> implements Iterator<E> {
+
+        private SLLNode<E> place, curr;
+
+        private LRIterator() {
+            place = (SLLNode<E>) first;
+            curr = null;
+        }
+
+        public boolean hasNext() {
+            return (place != null);
+        }
+
+        public E next() {
+            if (place == null)
+                throw new NoSuchElementException();
+            E nextElem = place.element;
+            curr = place;
+            place = place.succ;
+            return nextElem;
+        }
+
+        public void remove() {
+            //Not implemented
+        }
+    }
+    public void print()
+    {
+        SLLNode<E> temp =null;
+        for(temp = first ; temp != null ; temp=temp.succ)
+        {
+            System.out.print(temp.element+" ");
+        }
+
+    }
+
+    public void mirror(){
+        if (first != null) {
+            //m=nextsucc, p=tmp,q=next
+            SLLNode<E> tmp = first;
+            SLLNode<E> newsucc = null;
+            SLLNode<E> next;
+
+            while(tmp != null){
+                next = tmp.succ;
+                tmp.succ = newsucc;
+                newsucc = tmp;
+                tmp = next;
+            }
+            first = newsucc;
+        }
+
+    }
+    public void removeduplicate()
+    {
+        SLLNode<E> temp = first;
+        while(temp.succ!=null)
+        {
+            if(temp.element == temp.succ.element)
+            {
+                temp.succ = temp.succ.succ;
+            }
+            else
+            {
+                temp = temp.succ;
+            }
+        }
+
+
+
+    }
+
+    public void merge (SLL<E> in){
+        if (first != null) {
+            SLLNode<E> tmp = first;
+            while(tmp.succ != null)
+                tmp = tmp.succ;
+            tmp.succ = in.getFirst();
+        }
+        else{
+            first = in.getFirst();
+        }
+    }
+}
+
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader((new InputStreamReader(System.in)));
+        //int n = Integer.parseInt(br.readLine());
+        SLL<Integer> list1 = new SLL<>();
+        SLL<Integer> list2 = new SLL<>();
+        list1.insertLast(5);
+        list1.insertLast(2);
+        list1.insertLast(3);
+        list2.insertLast(5);
+        list2.insertLast(6);
+        list2.insertLast(6);
+        System.out.println();
+        //list1.print();
+        SLLNode<Integer> temp1 = list1.getFirst();
+        SLLNode<Integer> temp2 = list2.getFirst();
+        int n;
+        int nr1 = list1.length();
+        int nr2 = list2.length();
+        if (nr1< nr2)
+            n=nr1;
+        else
+            n=nr2;
+        SLL<Integer> new_list = new SLL<>();
+        for(int i = 0 ; i < n; i++)
+        {
+            if(i%2==0)
+            {
+                new_list.insertLast(temp1.element);
+                if(temp1.succ!=null)
+                {
+                    temp1=temp1.succ;
+                }
+                else
+                {
+                    break;
+                }
+                new_list.insertLast(temp1.element);
+                if(temp1.succ!=null)
+                {
+                    temp1=temp1.succ;
+                }
+                else
+                {
+                    break;
+
+                }
+            }
+            else if   (i%2!=0)
+            {
+
+                new_list.insertLast(temp2.element);
+                if(temp2.succ!=null)
+                    temp2=temp2.succ;
+                else
+                    break;
+                new_list.insertLast(temp2.element);
+                if(temp2.succ!=null)
+                    temp2=temp2.succ;
+                else
+                    break;
+            }
+        }
+        while(temp2!=null)
+        {
+            new_list.insertLast(temp2.element);
+            temp2=temp2.succ;
+        }
+        while(temp1!=null)
+        {
+            new_list.insertLast(temp1.element);
+            temp1=temp1.succ;
+        }
+        new_list.print();
+
+
+    }
+}
+=========================================================================================================
+RANGE
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+
+public class Range {
+
+    static long binarySearch(long arr[], long l, long r, long x)
+    {
+        if (r >= l) {
+            long mid =  (l + (r - l) / 2);
+
+            // If the element is present at the
+            // middle itself
+            if (((arr[(int) mid])*(arr[(int) mid]) + s(arr[(int) mid]) + 200*arr[(int) mid]) == x)
+                return mid;
+
+            // If element is smaller than mid, then
+            // it can only be present in left subarray
+            if (((arr[(int) mid])*(arr[(int) mid]) + s(arr[(int) mid]) + 200*arr[(int) mid]) > x)
+                return binarySearch(arr, l, mid - 1, x);
+
+            // Else the element can only be present
+            // in right subarray
+            return binarySearch(arr, mid + 1, r, x);
+        }
+
+        // We reach here when element is not present
+        // in array
+        return -1;
+    }
+
+    static long proveri(long N, long A, long B) {
+        // Vasiot kod tuka
+        long num = -1;
+        long[] anArray = LongStream.rangeClosed(A, B).toArray();
+        Arrays.sort(anArray);
+
+        num = binarySearch(anArray, A, B, N);
+
+
+        return num;
+    }
+    static int s(long n)
+    {
+        String ss = String.valueOf(n);
+        char[]cc = ss.toCharArray();
+        int sum = 0;
+        for(char c:cc)
+        {
+            sum+= Character.getNumericValue(c);
+        }
+        return sum;
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        int i,j,k;
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        long N = Long.parseLong(br.readLine());
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        long A = Long.parseLong(st.nextToken());
+        long B = Long.parseLong(st.nextToken());
+
+        long res = proveri(N, A, B);
+        System.out.println(res);
+
+        br.close();
+
+
+    }
+
+}
+==========================================================================================================
+PHARMACY
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.util.Iterator;
+
+class MapEntry<K extends Comparable<K>,E> implements Comparable<K> {
+
+    K key;
+    E value;
+
+    public MapEntry (K key, E val) {
+        this.key = key;
+        this.value = val;
+    }
+
+    public int compareTo (K that) {
+        @SuppressWarnings("unchecked")
+        MapEntry<K,E> other = (MapEntry<K,E>) that;
+        return this.key.compareTo(other.key);
+    }
+
+    public String toString () {
+        return  key + " " + value;
+    }
+}
+
+class SLLNode<E> {
+    protected E element;
+    protected SLLNode<E> succ;
+
+    public SLLNode(E elem, SLLNode<E> succ) {
+        this.element = elem;
+        this.succ = succ;
+    }
+
+    @Override
+    public String toString() {
+        return element.toString();
+    }
+}
+
+class CBHT<K extends Comparable<K>, E> {
+
+    private SLLNode<MapEntry<K,E>>[] buckets;
+
+    @SuppressWarnings("unchecked")
+    public CBHT(int m) {
+        buckets = (SLLNode<MapEntry<K,E>>[]) new SLLNode[m];
+    }
+
+    private int hash(K key) {
+        return Math.abs(key.hashCode()) % buckets.length;
+    }
+
+    public SLLNode<MapEntry<K,E>> search(K targetKey) {
+        int b = hash(targetKey);
+        for (SLLNode<MapEntry<K,E>> curr = buckets[b]; curr != null; curr = curr.succ) {
+            if (targetKey.equals(((MapEntry<K, E>) curr.element).key))
+                return curr;
+        }
+        return null;
+    }
+    public SLLNode<MapEntry<K, E>> getElem(int m)
+    {
+        return buckets[m];
+    }
+
+
+    public void insert(K key, E val) {      // Insert the entry <key, val> into this CBHT.
+        MapEntry<K, E> newEntry = new MapEntry<K, E>(key, val);
+        int b = hash(key);
+        for (SLLNode<MapEntry<K,E>> curr = buckets[b]; curr != null; curr = curr.succ) {
+            if (key.equals(((MapEntry<K, E>) curr.element).key)) {
+                curr.element = newEntry;
+                return;
+            }
+        }
+        buckets[b] = new SLLNode<MapEntry<K,E>>(newEntry, buckets[b]);
+    }
+
+    public void delete(K key) {
+        int b = hash(key);
+        for (SLLNode<MapEntry<K,E>> pred = null, curr = buckets[b]; curr != null; pred = curr, curr = curr.succ) {
+            if (key.equals(((MapEntry<K,E>) curr.element).key)) {
+                if (pred == null)
+                    buckets[b] = curr.succ;
+                else
+                    pred.succ = curr.succ;
+                return;
+            }
+        }
+    }
+
+    public String toString() {
+        String temp1 = "";
+        for (int i = 0; i < buckets.length; i++) {
+            temp1 += i + ":";
+            for (SLLNode<MapEntry<K,E>> curr = buckets[i]; curr != null; curr = curr.succ) {
+                temp1 += curr.element.toString() + " ";
+            }
+            temp1 += "\n";
+        }
+        return temp1;
+    }
+
+}
+class Medicine {
+    String name;
+    int available;
+    int price;
+    int amount;
+    String shortname;
+
+
+
+
+    public Medicine(String name, int available, int price, int amount) {
+        this.name = name.toUpperCase();
+        this.available = available;
+        this.price = price;
+        this.amount = amount;
+        shortname = name.substring(0,3).toUpperCase();
+    }
+    public String checkName(String s)
+    {
+        if(shortname.equals(s))
+            return name;
+        return null;
+    }
+    public void changeAmount(int n)
+    {
+        if(n>amount)
+        {
+            System.out.println("Cannot be made");
+        }
+        amount-=n;
+    }
+    @Override
+    public int hashCode() {
+
+        String name1 = shortname;
+        int char1 = name1.charAt(0);
+        int char2 = name1.charAt(1);
+        int char3 = name1.charAt(2);
+
+        return (29*(29*(char1)+ char2)+ char3) % 102780;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        //return super.equals(obj);
+        Medicine mm = (Medicine) obj;
+        return (this.amount==mm.amount && this.name.equals(mm.name) && this.price==mm.price && this.available ==  mm.available);
+    }
+
+
+
+   /* @Override
+    public int compareTo(Medicine o) {
+        //return name.compareTo(o.name) && price > o.price && amount > o.amount &&
+        return 0;
+    }*/
+}
+public class Main {
+    static int prime(int m)
+    {
+        BigInteger bi = new BigInteger(String.valueOf(m));
+        return  Integer.parseInt(String.valueOf(bi.nextProbablePrime()));
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
+        CBHT<String,Medicine> bucket = new CBHT<>(n*3/2);
+        for(int i =0 ;i <n; i++)
+        {
+            String [] parts = br.readLine().split(" ");
+            Medicine medic = new Medicine(parts[0],Integer.parseInt(parts[1]),Integer.parseInt(parts[2]),Integer.parseInt(parts[3]));
+            bucket.insert(parts[0],medic);
+
+        }
+
+        while (true) {
+            String s = br.readLine();
+            if (s.equals("KRAJ")){
+                break;
+            }
+            String nn = s.toUpperCase();
+            if(s.length() == 3){
+                SLLNode<MapEntry<String, Medicine>> current = bucket.getElem(0);
+                while (current!=null)
+                {
+                    System.out.println(current.element.value.shortname.equals(nn));
+                    current=current.succ;
+                }
+            }
+
+            SLLNode<MapEntry<String,Medicine>> a = bucket.search(nn);
+
+            if(a==null){
+                System.out.println("Nema takov lek");
+                String k = br.readLine();
+            }
+            else {
+                System.out.println(a.element.value.name);
+                if(a.element.value.available == 1){
+                    System.out.println("POS");
+                }
+                else {
+                    System.out.println("NEG");
+                }
+                System.out.println(a.element.value.price);
+                System.out.println(a.element.value.amount);
+
+                String k = br.readLine();
+                a.element.value.changeAmount(Integer.parseInt(k));
+
+                if (a.element.value.amount > 0){
+                    System.out.println("Napravena naracka");
+
+                }
+            }
+        }
+    }
+}
+==========================================================================================================
+COMPANY 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+import java.util.StringJoiner;
+
+class Worker implements Comparable<Worker>
+{
+    int ID;
+    int wage;
+
+    public Worker(int ID, int wage) {
+        this.ID = ID;
+        this.wage = wage;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public int getWage() {
+        return wage;
+    }
+
+    @Override
+    public int compareTo(Worker o) {
+        int i  = 0;
+        if(this.getID() >  o.getID())
+            i = 1;
+        else if(this.getID() <  o.getID())
+            i=-1;
+
+        return i;
+
+    }
+    @Override
+    public String toString()
+    {
+        StringJoiner sj = new StringJoiner(" ");
+        sj.add(String.valueOf(ID));
+        sj.add(String.valueOf(wage));
+        return sj.toString();
+    }
+}
+class DLLNode<E> {
+    protected E element;
+    protected DLLNode<E> pred, succ;
+
+    public DLLNode(E elem, DLLNode<E> pred, DLLNode<E> succ) {
+        this.element = elem;
+        this.pred = pred;
+        this.succ = succ;
+    }
+
+    @Override
+    public String toString() {
+        return element.toString();
+    }
+}
+class DLL<E> {
+    private DLLNode<E> first, last;
+
+    public DLL() {
+        // Construct an empty SLL
+        this.first = null;
+        this.last = null;
+    }
+
+    public void deleteList() {
+        first = null;
+        last = null;
+    }
+
+    public int length() {
+        int ret;
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret = 1;
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret++;
+            }
+            return ret;
+        } else
+            return 0;
+
+    }
+
+    public DLLNode<E> find(E o) {
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            while (tmp.element != o && tmp.succ != null)
+                tmp = tmp.succ;
+            if (tmp.element == o) {
+                return tmp;
+            } else {
+                System.out.println("Elementot ne postoi vo listata");
+            }
+        } else {
+            System.out.println("Listata e prazna");
+        }
+        return first;
+    }
+
+    public void insertFirst(E o) {
+        DLLNode<E> ins = new DLLNode<E>(o, null, first);
+        if (first == null)
+            last = ins;
+        else
+            first.pred = ins;
+        first = ins;
+    }
+
+    public void insertLast(E o) {
+        if (first == null)
+            insertFirst(o);
+        else {
+            DLLNode<E> ins = new DLLNode<E>(o, last, null);
+            last.succ = ins;
+            last = ins;
+        }
+    }
+
+    public void insertAfter(E o, DLLNode<E> after) {
+        if(after==last){
+            insertLast(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, after, after.succ);
+        after.succ.pred = ins;
+        after.succ = ins;
+    }
+
+    public void insertBefore(E o, DLLNode<E> before) {
+        if(before == first){
+            insertFirst(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, before.pred, before);
+        before.pred.succ = ins;
+        before.pred = ins;
+    }
+
+    public E deleteFirst() {
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            first = first.succ;
+            if (first != null) first.pred = null;
+            if (first == null)
+                last = null;
+            return tmp.element;
+        } else
+            return null;
+    }
+
+    public E deleteLast() {
+        if (first != null) {
+            if (first.succ == null)
+                return deleteFirst();
+            else {
+                DLLNode<E> tmp = last;
+                last = last.pred;
+                last.succ = null;
+                return tmp.element;
+            }
+        }
+        // else throw Exception
+        return null;
+    }
+
+    public E delete(DLLNode<E> node) {
+        if(node==first){
+            deleteFirst();
+            return node.element;
+        }
+        if(node==last){
+            deleteLast();
+            return node.element;
+        }
+        node.pred.succ = node.succ;
+        node.succ.pred = node.pred;
+        return node.element;
+
+    }
+
+    @Override
+    public String toString() {
+        String ret = new String();
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret += tmp + "<->";
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret += tmp + "<->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+
+    public String toStringR() {
+        String ret = new String();
+        if (last != null) {
+            DLLNode<E> tmp = last;
+            ret += tmp + "<->";
+            while (tmp.pred != null) {
+                tmp = tmp.pred;
+                ret += tmp + "<->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+
+    public DLLNode<E> getFirst() {
+        return first;
+    }
+
+    public DLLNode<E> getLast() {
+
+        return last;
+    }
+
+    public void izvadiDupliIPrebroj(){
+
+    }
+}
+
+public class Main {
+    public static void sort(DLL<Worker> lista)
+    {
+        DLLNode<Worker> tmp = lista.getFirst();
+
+        while (tmp !=null){
+            DLLNode<Worker> tmp1 = tmp;
+            while (tmp1 != null){
+                if (tmp.element.ID < tmp1.element.ID){
+                    int pom = tmp.element.ID;
+                    tmp.element.ID=tmp1.element.ID;
+                    tmp1.element.ID=pom;
+
+                    int pom1 = tmp.element.wage;
+                    tmp.element.wage=tmp1.element.wage;
+                    tmp1.element.wage=pom1;
+
+                }
+                tmp1 = tmp1.succ;
+            }
+            tmp = tmp.succ;
+        }
+        tmp = lista.getFirst();
+        while(tmp!=null)
+        {
+            System.out.println(tmp);
+            tmp = tmp.succ;
+        }
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        DLL<Worker> dll = new DLL<>();
+        for(int i =0 ; i< n; i++)
+        {
+            dll.insertLast(new Worker(sc.nextInt(),sc.nextInt()));
+        }
+        int wag = sc.nextInt();
+
+        DLLNode<Worker> work =  dll.getFirst();
+        while(work!=null)
+        {
+            if(work.element.getWage()< wag)
+            {
+                dll.delete(work);
+            }
+            work = work.succ;
+        }
+        DLLNode<Worker> temp = dll.getFirst();
+
+        //sort(dll);
+        DLL<Worker> new_list = new DLL<>();
+        int id;
+        int wage;
+        while (temp != null)
+        {
+            System.out.println("temp -> " + temp.element);
+            DLLNode<Worker> temp1 = temp;
+            while(temp1!=null)
+            {
+                System.out.println("temp1 -> " + temp1.element);
+                //System.out.println("temp -> " + temp.element);
+
+                if(temp.element.ID<temp1.element.ID)
+                {
+                    id = temp1.element.ID;
+                    wage = temp1.element.wage;
+                    temp1.element.ID = temp.element.ID;
+                    temp1.element.wage = temp.element.wage;
+                    temp.element.ID = id;
+                    temp.element.wage = wage;
+
+
+                }
+                temp1 = temp1.succ;
+            }
+            temp = temp.succ;
+            if(temp!=null) {
+                System.out.println("temp -> " + temp.element);
+            }
+
+
+        }
+         temp = dll.getFirst();
+        if(temp == null)
+        {
+            System.out.println("nema");
+        }
+        else {
+            while (temp != null) {
+                System.out.println(temp.element);
+                temp = temp.succ;
+            }
+        }
+        /*while (temp !=  null)
+        {
+            StringJoiner sj = new StringJoiner(" ");
+            sj.add(String.valueOf(temp.element.getID()));
+            sj.add(String.valueOf(temp.element.getWage()));
+            System.out.println(sj.toString());
+            temp=temp.succ;
+        }*/
+
+
+
+    }
+}
+==========================================================================================================
+PASSWORDS
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+
+class MapEntry<K extends Comparable<K>,E> implements Comparable<K> {
+
+    K key;
+    E value;
+
+    public MapEntry (K key, E val) {
+        this.key = key;
+        this.value = val;
+    }
+
+    public int compareTo (K that) {
+        @SuppressWarnings("unchecked")
+        MapEntry<K,E> other = (MapEntry<K,E>) that;
+        return this.key.compareTo(other.key);
+    }
+
+    public String toString () {
+        return  key + " " + value;
+    }
+}
+
+class SLLNode<E> {
+    protected E element;
+    protected SLLNode<E> succ;
+
+    public SLLNode(E elem, SLLNode<E> succ) {
+        this.element = elem;
+        this.succ = succ;
+    }
+
+    @Override
+    public String toString() {
+        return element.toString();
+    }
+}
+
+class CBHT<K extends Comparable<K>, E> {
+
+    private SLLNode<MapEntry<K,E>>[] buckets;
+
+    @SuppressWarnings("unchecked")
+    public CBHT(int m) {
+        buckets = (SLLNode<MapEntry<K,E>>[]) new SLLNode[m];
+    }
+
+    private int hash(K key) {
+        return Math.abs(key.hashCode()) % buckets.length;
+    }
+
+    public SLLNode<MapEntry<K,E>> search(K targetKey) {
+        int b = hash(targetKey);
+        for (SLLNode<MapEntry<K,E>> curr = buckets[b]; curr != null; curr = curr.succ) {
+            if (targetKey.equals(((MapEntry<K, E>) curr.element).key))
+                return curr;
+        }
+        return null;
+    }
+
+    public void insert(K key, E val) {      // Insert the entry <key, val> into this CBHT.
+        MapEntry<K, E> newEntry = new MapEntry<K, E>(key, val);
+        int b = hash(key);
+        for (SLLNode<MapEntry<K,E>> curr = buckets[b]; curr != null; curr = curr.succ) {
+            if (key.equals(((MapEntry<K, E>) curr.element).key)) {
+                curr.element = newEntry;
+                return;
+            }
+        }
+        buckets[b] = new SLLNode<MapEntry<K,E>>(newEntry, buckets[b]);
+    }
+
+    public void delete(K key) {
+        int b = hash(key);
+        for (SLLNode<MapEntry<K,E>> pred = null, curr = buckets[b]; curr != null; pred = curr, curr = curr.succ) {
+            if (key.equals(((MapEntry<K,E>) curr.element).key)) {
+                if (pred == null)
+                    buckets[b] = curr.succ;
+                else
+                    pred.succ = curr.succ;
+                return;
+            }
+        }
+    }
+
+    public String toString() {
+        String temp1 = "";
+        for (int i = 0; i < buckets.length; i++) {
+            temp1 += i + ":";
+            for (SLLNode<MapEntry<K,E>> curr = buckets[i]; curr != null; curr = curr.succ) {
+                temp1 += curr.element.toString() + " ";
+            }
+            temp1 += "\n";
+        }
+        return temp1;
+    }
+
+}
+
+
+public class Lozinki {
+    static int nextPrime(int m)
+    {
+        BigInteger b = new BigInteger(String.valueOf(m));
+        return Integer.parseInt(b.nextProbablePrime().toString());
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        CBHT<String,String> bucket = new CBHT<>(nextPrime((N*3)/2));
+        for(int i = 0; i< N;i++)
+        {
+            String[] split = br.readLine().split(" ");
+            bucket.insert(split[0],split[1]);
+        }
+        String s;
+        while(!(s = br.readLine()).equals("KRAJ"))
+        {
+            String[] parts = s.split(" ");
+            SLLNode<MapEntry<String,String>>temp = bucket.search(parts[0]);
+            if(temp==null)
+            {
+                System.out.println("Nenajaven");
+            }
+            else
+            {
+                if(temp.element.value.equals(parts[1]))
+                {
+                    System.out.println("Najaven");
+                }
+                else {
+                    System.out.println("Nenajaven");
+                }
+                //String
+                //if(temp.element)
+            }
+            //System.out.println(temp.element);
+        }
+    }
+}
+==========================================================================================================
+TRANSLATOR
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+
+class MapEntry<K extends Comparable<K>,E> implements Comparable<K> {
+
+    K key;
+    E value;
+
+    public MapEntry (K key, E val) {
+        this.key = key;
+        this.value = val;
+    }
+    public int compareTo (K that) {
+        @SuppressWarnings("unchecked")
+        MapEntry<K,E> other = (MapEntry<K,E>) that;
+        return this.key.compareTo(other.key);
+    }
+    public String toString () {
+        return "(" + key + "," + value + ")";
+    }
+}
+
+
+class OBHT<K extends Comparable<K>,E> {
+
+    private MapEntry<K,E>[] buckets;
+    static final int NONE = -1; // ... distinct from any bucket index.
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static final MapEntry former = new MapEntry(null, null);
+    private int occupancy = 0;
+
+    @SuppressWarnings("unchecked")
+    public OBHT (int m) {
+        buckets = (MapEntry<K,E>[]) new MapEntry[m];
+    }
+
+    private int hash (K key) {
+        return Math.abs(key.hashCode()) % buckets.length;
+    }
+
+    public MapEntry<K,E> getBucket(int i){
+        return buckets[i];
+    }
+
+    public int search (K targetKey) {
+        int b = hash(targetKey); int n_search=0;
+        for (;;) {
+            MapEntry<K,E> oldEntry = buckets[b];
+            if (oldEntry == null)
+                return NONE;
+            else if (targetKey.equals(oldEntry.key))
+                return b;
+            else{
+                b = (b + 1) % buckets.length;
+                n_search++;
+                if(n_search==buckets.length)
+                    return -1;
+            }
+        }
+    }
+
+    public void insert (K key, E val) {
+        MapEntry<K,E> newEntry = new MapEntry<K,E>(key, val);
+        int b = hash(key); int n_search=0;
+
+        for (;;) {
+            MapEntry<K,E> oldEntry = buckets[b];
+            if (oldEntry == null) {
+                if (++occupancy == buckets.length) {
+                    System.out.println("Hash tabelata e polna!!!");
+                }
+                buckets[b] = newEntry;
+                return;
+            } else if (oldEntry == former
+                    || key.equals(oldEntry.key)) {
+                buckets[b] = newEntry;
+                return;
+            } else{
+                b = (b + 1) % buckets.length;
+                n_search++;
+                if(n_search==buckets.length)
+                    return;
+
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void delete (K key) {
+        int b = hash(key); int n_search=0;
+        for (;;) {
+            MapEntry<K,E> oldEntry = buckets[b];
+
+            if (oldEntry == null)
+                return;
+            else if (key.equals(oldEntry.key)) {
+                buckets[b] = former;
+                return;
+            } else{
+                b = (b + 1) % buckets.length;
+                n_search++;
+                if(n_search==buckets.length)
+                    return;
+
+            }
+        }
+    }
+
+    public String toString () {
+        String temp = "";
+        for (int i = 0; i < buckets.length; i++) {
+            temp += i + ":";
+            if (buckets[i] == null)
+                temp += "\n";
+            else if (buckets[i] == former)
+                temp += "former\n";
+            else
+                temp += buckets[i] + "\n";
+        }
+        return temp;
+    }
+}
+class Zbor implements Comparable<Zbor>
+{
+    String word;
+
+    public Zbor(String word) {
+        this.word = word;
+    }
+
+    @Override
+    public int hashCode() {
+        return word.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        //return super.equals(obj);
+        Zbor z = (Zbor)obj;
+        return word.equals(((Zbor) obj).word);
+
+    }
+    @Override
+    public String toString()
+    {
+        return word;
+    }
+    @Override
+    public int compareTo(Zbor o) {
+        return word.compareTo(o.word);
+    }
+}
+public class Main {
+    static int nextPrime(int n)
+    {
+        BigInteger bg = new BigInteger(String.valueOf(n));
+        return  Integer.parseInt(String.valueOf(bg.nextProbablePrime()));
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        OBHT<Zbor,String>  bucket = new OBHT<>(nextPrime((n*3)/2));
+        for(int i=0 ;i < n;i++)
+        {
+            String[] parts  = br.readLine().split(" ");
+            Zbor z = new Zbor(parts[1]);
+            bucket.insert(z,parts[0]);
+        }
+        String s ;
+        while(!((s = br.readLine()).equals("KRAJ")))
+        {
+            Zbor z  = new Zbor(s);
+            int i = bucket.search(z);
+            if(i == (-1)) {
+                System.out.println("/");
+            }
+            else {
+                MapEntry<Zbor, String> temp1 = bucket.getBucket(i);
+                System.out.println(temp1.value);
+
+            }
+
+        }
+    }
+
+}
+=========================================================================================================
+List Of Lists
+import java.util.Scanner;
+
+class DLLNode<E> {
+    protected E element;
+    protected DLLNode<E> pred, succ;
+
+    public DLLNode(E elem, DLLNode<E> pred, DLLNode<E> succ) {
+        this.element = elem;
+        this.pred = pred;
+        this.succ = succ;
+    }
+
+    @Override
+    public String toString() {
+        return "<-" + element.toString() + "->";
+    }
+}
+
+class DLL<E> {
+    private DLLNode<E> first, last;
+
+    public DLL() {
+        // Construct an empty SLL
+        this.first = null;
+        this.last = null;
+    }
+
+    public void deleteList() {
+        first = null;
+        last = null;
+    }
+
+    public int length() {
+        int ret;
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret = 1;
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret++;
+            }
+            return ret;
+        } else
+            return 0;
+
+    }
+
+    public void insertFirst(E o) {
+        DLLNode<E> ins = new DLLNode<E>(o, null, first);
+        if (first == null)
+            last = ins;
+        else
+            first.pred = ins;
+        first = ins;
+    }
+
+    public void insertLast(E o) {
+        if (first == null)
+            insertFirst(o);
+        else {
+            DLLNode<E> ins = new DLLNode<E>(o, last, null);
+            last.succ = ins;
+            last = ins;
+        }
+    }
+
+    public void insertAfter(E o, DLLNode<E> after) {
+        if (after == last) {
+            insertLast(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, after, after.succ);
+        after.succ.pred = ins;
+        after.succ = ins;
+    }
+
+    public void insertBefore(E o, DLLNode<E> before) {
+        if (before == first) {
+            insertFirst(o);
+            return;
+        }
+        DLLNode<E> ins = new DLLNode<E>(o, before.pred, before);
+        before.pred.succ = ins;
+        before.pred = ins;
+    }
+
+    public E deleteFirst() {
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            first = first.succ;
+            if (first != null) first.pred = null;
+            if (first == null)
+                last = null;
+            return tmp.element;
+        } else
+            return null;
+    }
+
+    public E deleteLast() {
+        if (first != null) {
+            if (first.succ == null)
+                return deleteFirst();
+            else {
+                DLLNode<E> tmp = last;
+                last = last.pred;
+                last.succ = null;
+                return tmp.element;
+            }
+        }
+        // else throw Exception
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        String ret = new String();
+        if (first != null) {
+            DLLNode<E> tmp = first;
+            ret += tmp + "<->";
+            while (tmp.succ != null) {
+                tmp = tmp.succ;
+                ret += tmp + "<->";
+            }
+        } else
+            ret = "Prazna lista!!!";
+        return ret;
+    }
+
+    public DLLNode<E> getFirst() {
+        return first;
+    }
+
+    public DLLNode<E> getLast() {
+
+        return last;
+    }
+
+}
+
+public class ListaOdListi {
+
+    public static long findMagicNumber(DLL<DLL<Integer>> list) {
+        //Vashiot kod tuka...
+        long multsum = 1;
+        DLLNode<DLL<Integer>> list1 = list.getFirst();
+        while(list1!=null) {
+            DLLNode<Integer> temp = list1.element.getFirst();
+
+            int sum = 0;
+            while (temp != null)
+            {
+                sum += temp.element;
+                temp = temp.succ;
+            }
+            multsum = multsum * sum;
+            list1 = list1.succ;
+        }
+
+
+
+        return multsum;
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int m = in.nextInt();
+        DLL<DLL<Integer>> list = new DLL<DLL<Integer>>();
+        for (int i = 0; i < n; i++) {
+            DLL<Integer> tmp = new DLL<Integer>();
+            for (int j = 0; j < m; j++) {
+                tmp.insertLast(in.nextInt());
+            }
+            list.insertLast(tmp);
+        }
+        in.close();
+        System.out.println(findMagicNumber(list));
+    }
+
+}
