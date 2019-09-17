@@ -1,3 +1,207 @@
+SUM OF ELEMENTS(WITH DEQUES)
+
+
+package com.company;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+class BNode<E> {
+
+    public E info;
+    public BNode<E> left;
+    public BNode<E> right;
+
+    static int LEFT = 1;
+    static int RIGHT = 2;
+
+    public BNode(E info) {
+        this.info = info;
+        left = null;
+        right = null;
+    }
+
+    public BNode() {
+        this.info = null;
+        left = null;
+        right = null;
+    }
+
+    public BNode(E info, BNode<E> left, BNode<E> right) {
+        this.info = info;
+        this.left = left;
+        this.right = right;
+    }
+
+}
+
+class BTree<E extends Comparable<E>> {
+
+    public BNode<E> root;
+
+    public BTree() {
+        root = null;
+    }
+
+    public BTree(E info) {
+        root = new BNode<E>(info);
+    }
+
+    public void makeRoot(BNode<E> elem) {
+        root = elem;
+    }
+    public void preorder() {
+        System.out.print("PREORDER: ");
+        preorderR(root);
+        System.out.println();
+    }
+
+    public void preorderR(BNode<E> n) {
+        if (n != null) {
+            System.out.print(n.info.toString()+" ");
+            preorderR(n.left);
+            preorderR(n.right);
+        }
+    }
+
+    public void makeRootNode(BNode<E> node) {
+        root = node;
+    }
+
+    public BNode<E> addChild(BNode<E> node, int where, BNode<E> tmp) {
+
+        if (where == BNode.LEFT) {
+            if (node.left != null)  // veke postoi element
+                return null;
+            node.left = tmp;
+        } else {
+            if (node.right != null) // veke postoi element
+                return null;
+            node.right = tmp;
+        }
+        return tmp;
+
+    }
+
+    public BNode<E> addChildNode(BNode<E> node, int where, BNode<E> tmp) {
+
+        if (where == BNode.LEFT) {
+            if (node.left != null)  // veke postoi element
+                return null;
+            node.left = tmp;
+        } else {
+            if (node.right != null) // veke postoi element
+                return null;
+            node.right = tmp;
+        }
+
+        return tmp;
+    }
+
+}
+
+public class BinaryTreeSum {
+
+    public static int preorderAdd(BNode<Integer> n, int M){
+        int sum = n.info;
+        if (n != null && (sum < M)) {
+            return (sum + preorderAdd(n.left, M) + preorderAdd(n.right, M));
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(br.readLine());
+        BNode<Integer> [] list = new BNode[N];
+
+        for (int i = 0; i < N; i ++){
+            list[i] = new BNode<>();
+        }
+
+        BTree<Integer> tree = new BTree<>();
+        for (int i = 0; i < N; i ++){
+            String [] s = br.readLine().split(" ");
+            int index = Integer.parseInt(s[0]);
+            int data = Integer.parseInt(s[1]);
+            list[index].info = data;
+            int parent = -1;
+            String where = s[2];
+            if (s.length == 4){
+                parent = Integer.parseInt(s[3]);
+            }
+            if (where.equals("LEFT")){
+                tree.addChild(list[parent],BNode.LEFT,list[index]);
+            }
+            else if (where.equals("RIGHT")){
+                tree.addChild(list[parent],BNode.RIGHT,list[index]);
+            }
+            else {
+                tree.makeRoot(list[index]);
+            }
+
+        }
+      //  System.out.println();
+        int M = Integer.parseInt(br.readLine());
+       // tree.preorder();
+       // System.out.println();
+        System.out.println(M);
+        printSum1Sum2(tree,M);
+
+
+
+
+
+    }
+    public static void printSum1Sum2(BTree<Integer> tree,int val)
+    {
+        BNode<Integer> temp1 = tree.root;
+        Deque<BNode<Integer>> dq1 = new ArrayDeque<>();
+        Deque<BNode<Integer>> dq2 = new ArrayDeque<>();
+        dq1.push(temp1.left);
+        dq2.push(temp1.right);
+        int sum1 = 0;
+        int sum2 = 0;
+        while(!dq1.isEmpty())
+        {
+            BNode<Integer> temp = dq1.pop();
+            System.out.println(temp.info);
+            if(temp.info<val)
+            {
+                sum1+=temp.info;
+            }
+            if(temp.right!=null)
+              dq1.push(temp.right);
+
+            if(temp.left!=null)
+              dq1.push(temp.left);
+        }
+        while(!dq2.isEmpty())
+        {
+            BNode<Integer> temp = dq2.pop();
+            if(temp.info>val)
+            {
+                sum2+=temp.info;
+            }
+            if(temp.right!=null)
+                dq2.push(temp.right);
+
+            if(temp.left!=null)
+                dq2.push(temp.left);
+        }
+        System.out.println(sum1 + " " + sum2);
+
+    }
+}
+
+
+
 SOLDIER--
 import java.io.BufferedReader;
 import java.io.IOException;
