@@ -1,3 +1,57 @@
+?????
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Range {
+
+    static long proveri(long N, long A, long B) {
+        // Vasiot kod tuka
+        if(A == B) return -1;
+
+        if(calculate(A) == N) return A;
+        else if(calculate(B) == N) return B;
+
+        long middle = (A+B)/2, temp;
+        temp = calculate(middle);
+
+        if(temp > N) return proveri(N, A, middle);
+        else if(temp < N) return proveri(N, middle, B);
+        else return middle;
+    }
+
+    static long calculate(long x)
+    {
+        return (long) ((x*x) + sumOfDigits(x) + (200*x));
+    }
+
+    public static long sumOfDigits(long n)
+    {
+        return n == 0 ? 0 : n % 10 + sumOfDigits(n/10);
+    }
+
+    public static void main(String[] args) throws Exception {
+        int i,j,k;
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        long N = Long.parseLong(br.readLine());
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        long A = Long.parseLong(st.nextToken());
+        long B = Long.parseLong(st.nextToken());
+
+        long res = proveri(N, A, B);
+        System.out.println(res);
+
+        br.close();
+
+    }
+
+}
+
+
 SUM OF ELEMENTS(WITH DEQUES)
 
 
